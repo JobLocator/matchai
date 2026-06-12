@@ -1,0 +1,23 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "./generated/prisma/client"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model User {
+  id             String   @id @default(uuid())
+  email          String   @unique
+  clerkId        String   @unique @map("clerk_id")
+  name           String?
+  resumeUrl      String?  @map("resume_url")
+  resumeText     String?  @map("resume_text")
+  resumeVectorId String?  @map("resume_vector_id")
+  preferences    Json?
+  createdAt      DateTime @default(now()) @map("created_at")
+  updatedAt      DateTime @updatedAt @map("updated_at")
+
+  @@map("users")
+}

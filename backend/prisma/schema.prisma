@@ -1,67 +1,23 @@
 generator client {
   provider = "prisma-client-js"
+  output   = "./generated/prisma/client"
 }
 
 datasource db {
   provider = "postgresql"
-  url      = env("DATABASE_URL")
 }
 
 model User {
-  id              String    @id @default(uuid())
-  email           String    @unique
-  clerkId         String    @unique @map("clerk_id")
-  name            String?
-  resumeUrl       String?   @map("resume_url")
-  resumeText      String?   @map("resume_text")
-  resumeVectorId  String?   @map("resume_vector_id")
-  preferences     Json?
-  createdAt       DateTime  @default(now()) @map("created_at")
-  updatedAt       DateTime  @updatedAt @map("updated_at")
-  matches         Match[]
+  id             String   @id @default(uuid())
+  email          String   @unique
+  clerkId        String   @unique @map("clerk_id")
+  name           String?
+  resumeUrl      String?  @map("resume_url")
+  resumeText     String?  @map("resume_text")
+  resumeVectorId String?  @map("resume_vector_id")
+  preferences    Json?
+  createdAt      DateTime @default(now()) @map("created_at")
+  updatedAt      DateTime @updatedAt @map("updated_at")
 
   @@map("users")
-}
-
-model Job {
-  id            String    @id @default(uuid())
-  externalId    String    @unique @map("external_id")
-  title         String
-  companyName   String    @map("company_name")
-  companyStage  String?   @map("company_stage")
-  description   String
-  skillsTags    String[]  @map("skills_tags")
-  location      String?
-  isRemote      Boolean   @default(false) @map("is_remote")
-  salaryMin     Int?      @map("salary_min")
-  salaryMax     Int?      @map("salary_max")
-  jobType       String?   @map("job_type")
-  sourceUrl     String    @map("source_url")
-  atsSource     String?   @map("ats_source")
-  vectorId      String?   @map("vector_id")
-  isActive      Boolean   @default(true) @map("is_active")
-  postedAt      DateTime? @map("posted_at")
-  scrapedAt     DateTime  @default(now()) @map("scraped_at")
-  matches       Match[]
-
-  @@map("jobs")
-}
-
-model Match {
-  id             String    @id @default(uuid())
-  userId         String    @map("user_id")
-  jobId          String    @map("job_id")
-  score          Float
-  matchedSkills  String[]  @map("matched_skills")
-  missingSkills  String[]  @map("missing_skills")
-  llmRank        Int?      @map("llm_rank")
-  isSaved        Boolean   @default(false) @map("is_saved")
-  isApplied      Boolean   @default(false) @map("is_applied")
-  appliedAt      DateTime? @map("applied_at")
-  computedAt     DateTime  @default(now()) @map("computed_at")
-  user           User      @relation(fields: [userId], references: [id])
-  job            Job       @relation(fields: [jobId], references: [id])
-
-  @@unique([userId, jobId])
-  @@map("matches")
 }

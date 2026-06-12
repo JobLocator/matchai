@@ -1,11 +1,10 @@
+import "dotenv/config";
+
 import Fastify from "fastify";
 import cors from "@fastify/cors";
 import helmet from "@fastify/helmet";
-import dotenv from "dotenv";
 import { healthRoute } from "./routes/health";
 import { authRoutes } from "./routes/auth";
-
-dotenv.config();
 
 const app = Fastify({ logger: true });
 
@@ -15,13 +14,12 @@ async function start() {
     credentials: true,
   });
   await app.register(helmet);
-
   app.register(healthRoute);
   app.register(authRoutes, { prefix: "/api/auth" });
 
   const port = Number(process.env.PORT) || 3001;
   await app.listen({ port, host: "0.0.0.0" });
-  console.log(`Server running on http://localhost:${port}`);
+  console.log(`✅ Server running on http://localhost:${port}`);
 }
 
 start().catch((err) => {
